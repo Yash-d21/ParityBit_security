@@ -134,8 +134,43 @@ export const ProductsSection = () => {
           </h3>
         </div>
 
-        {/* 3D Scene Container */}
-        <div className="w-full max-w-[800px] flex flex-col items-center perspective-[2500px]">
+        {/* Mobile View (Sticky Card) */}
+        <div className="md:hidden w-full h-[65vh] mt-4 bg-[#0a0a0a] rounded-[2rem] border border-white/10 flex flex-col overflow-hidden relative shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50">
+           <AnimatePresence mode="wait">
+             <motion.div
+               key={activeId}
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               exit={{ opacity: 0, scale: 1.05 }}
+               transition={{ duration: 0.3 }}
+               className="absolute inset-0 flex flex-col"
+             >
+               <div className="relative w-full h-[45%] shrink-0">
+                 <img src={activeProduct.image} className="w-full h-full object-cover" />
+                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0a]" />
+                 <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full flex items-center gap-2">
+                   <div className="w-2 h-2 rounded-full bg-[#8A2BE2] animate-pulse" />
+                   <span className="text-[10px] font-bold text-white tracking-widest uppercase">{activeProduct.name}</span>
+                 </div>
+               </div>
+               <div className="p-6 flex-1 flex flex-col relative z-10">
+                 <h2 className="text-2xl font-bold text-white mb-3 leading-tight">{activeProduct.title}</h2>
+                 <p className="text-sm text-gray-400 mb-6 line-clamp-3 leading-relaxed">{activeProduct.description}</p>
+                 <div className="grid grid-cols-2 gap-y-3 gap-x-2 mt-auto">
+                   {activeProduct.features.map((f, i) => (
+                     <div key={i} className="flex items-center gap-2 text-xs">
+                       <CheckCircle2 className="w-4 h-4 text-[#8A2BE2] shrink-0" />
+                       <span className="text-gray-300">{f}</span>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+             </motion.div>
+           </AnimatePresence>
+        </div>
+
+        {/* 3D Scene Container (Desktop Only) */}
+        <div className="hidden md:flex w-full max-w-[800px] flex-col items-center perspective-[2500px]">
 
           {/* Entire Laptop Group */}
           <motion.div
@@ -182,7 +217,7 @@ export const ProductsSection = () => {
                   <div className="flex-1 flex overflow-hidden relative z-10">
 
                     {/* Left Sidebar - Product List */}
-                    <div className="w-[35%] md:w-[30%] bg-black/40 border-r border-white/10 flex flex-col shrink-0">
+                    <div className="w-[45%] sm:w-[35%] md:w-[30%] bg-black/40 border-r border-white/10 flex flex-col shrink-0">
                       <div className="p-3 border-b border-white/5 text-[9px] md:text-[10px] text-gray-500 font-bold tracking-widest uppercase">
                         Product Suite
                       </div>

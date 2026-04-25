@@ -6,9 +6,9 @@ import {
   MenubarTrigger,
   MenubarSeparator,
 } from "./menubar";
-import { Shield, Box, Target, FileText, Mail, ChevronRight, Zap, Eye, Lock, ArrowRight } from "lucide-react";
-import { useRef } from "react";
-import { motion, useInView } from "motion/react";
+import { Shield, Box, Target, FileText, Mail, ChevronRight, Zap, Eye, Lock, ArrowRight, Menu, X } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "motion/react";
 
 /* ---------------- WordsPullUp ---------------- */
 interface WordsPullUpProps {
@@ -50,6 +50,8 @@ export const WordsPullUp = ({ text, className = "", showAsterisk = false, style 
 /* ---------------- ParityHero ---------------- */
 
 export const ParityHero = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <section className="h-screen w-full relative z-20 p-2 md:p-4">
       <div className="relative h-[95vh] w-full overflow-hidden rounded-2xl md:rounded-[2rem] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] bg-black/20 backdrop-blur-sm mt-4 md:mt-6">
@@ -70,13 +72,25 @@ export const ParityHero = () => {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(138,43,226,0.15)_0%,transparent_60%)] z-10" />
 
         {/* Navbar (Header Thing) */}
-        <nav className="absolute left-1/2 top-0 z-30 -translate-x-1/2">
-          <Menubar className="h-auto rounded-b-2xl md:rounded-b-3xl bg-black/40 backdrop-blur-xl border-x border-b border-t-0 border-white/10 px-4 py-2 sm:px-6 md:px-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
+        <nav className="absolute left-1/2 top-0 z-50 -translate-x-1/2 w-[95vw] md:w-auto mt-2 md:mt-0">
+          <div className="mx-auto flex items-center justify-between md:justify-center rounded-2xl md:rounded-b-3xl md:rounded-t-none bg-black/40 backdrop-blur-xl border border-white/10 md:border-t-0 px-4 py-3 sm:px-6 md:px-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
             
             {/* Logo */}
-            <div className="flex items-center justify-center pr-4 md:pr-6 border-r border-white/10 mr-2 md:mr-4">
-              <img src="/paritybit-logo.png" alt="ParityBit" className="h-8 md:h-10 object-contain" />
+            <div className="flex items-center justify-center md:pr-6 md:border-r border-white/10 md:mr-4">
+              <img src="/paritybit-logo.png" alt="ParityBit" className="h-7 md:h-10 object-contain" />
             </div>
+
+            {/* Mobile Hamburger Toggle */}
+            <button 
+              className="md:hidden text-white/70 hover:text-white p-1"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:block">
+              <Menubar className="border-none bg-transparent shadow-none p-0 h-auto">
 
             {/* Our Products */}
             <MenubarMenu>
@@ -162,7 +176,58 @@ export const ParityHero = () => {
               </MenubarContent>
             </MenubarMenu>
 
-          </Menubar>
+              </Menubar>
+            </div>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="md:hidden absolute top-full left-0 w-full mt-2 bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 shadow-2xl flex flex-col gap-6 max-h-[70vh] overflow-y-auto"
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="text-[10px] font-bold text-[#8A2BE2] uppercase tracking-widest px-2 mb-1">Products</div>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <Shield className="w-4 h-4 text-[#8A2BE2]" /> ThreatAtlas
+                  </button>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <Zap className="w-4 h-4 text-[#8A2BE2]" /> VECTOR SIEM
+                  </button>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <Eye className="w-4 h-4 text-[#8A2BE2]" /> PhishGuard
+                  </button>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <Lock className="w-4 h-4 text-[#8A2BE2]" /> Parity OS
+                  </button>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <div className="text-[10px] font-bold text-[#8A2BE2] uppercase tracking-widest px-2 mb-1">Modules</div>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <Box className="w-4 h-4 text-gray-400" /> Penetration Testing
+                  </button>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <Target className="w-4 h-4 text-gray-400" /> Incident Response
+                  </button>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <div className="text-[10px] font-bold text-[#8A2BE2] uppercase tracking-widest px-2 mb-1">Company</div>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <FileText className="w-4 h-4 text-gray-400" /> View Case Studies
+                  </button>
+                  <button className="text-left text-sm text-white/80 hover:text-white py-2 px-2 rounded-lg hover:bg-white/5 flex items-center gap-3 transition-colors">
+                    <Mail className="w-4 h-4 text-gray-400" /> Talk to Sales
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
 
         {/* Hero content */}
@@ -175,7 +240,7 @@ export const ParityHero = () => {
                 System Online
               </div>
               <h1
-                className="font-bold leading-[0.85] tracking-tighter text-[22vw] sm:text-[20vw] md:text-[18vw] lg:text-[14vw] xl:text-[12vw] text-white"
+                className="font-bold leading-[0.85] tracking-tighter text-[20vw] sm:text-[20vw] md:text-[18vw] lg:text-[14vw] xl:text-[12vw] text-white"
               >
                 <WordsPullUp text="ParityBit" showAsterisk />
               </h1>

@@ -447,6 +447,19 @@ const serviceFrames = [
 /*  Main Section                                                      */
 /* ------------------------------------------------------------------ */
 
+const MobileServiceTile = ({ frame }: { frame: any }) => {
+  const [isActive, setIsActive] = React.useState(false);
+
+  return (
+    <div 
+      className={`w-full rounded-3xl overflow-hidden relative transition-all duration-500 border border-white/5 shadow-lg ${isActive ? 'h-[400px]' : 'h-32'}`}
+      onClick={() => setIsActive(!isActive)}
+    >
+      {frame.content(false, isActive)}
+    </div>
+  );
+};
+
 export const ServicesSection = () => {
   return (
     <>
@@ -461,7 +474,15 @@ export const ServicesSection = () => {
             <p className="mt-4 text-xs text-gray-400 uppercase tracking-widest animate-pulse">Tap a module to expand details</p>
           </div>
 
-          <div className="w-full aspect-square max-h-[85vh]">
+          {/* Mobile Layout */}
+          <div className="md:hidden flex flex-col gap-4 w-full mt-8">
+            {serviceFrames.map(frame => (
+              <MobileServiceTile key={frame.id} frame={frame} />
+            ))}
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden md:block w-full aspect-square max-h-[85vh]">
             <DynamicFrameLayout
               frames={serviceFrames}
               className="w-full h-full"

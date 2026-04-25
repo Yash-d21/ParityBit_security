@@ -37,7 +37,7 @@ const MainContent = () => {
       <ProductsSection />
 
       {/* Testimonials */}
-      <section className="relative z-20 py-48 md:py-64 px-6 md:px-12 bg-transparent">
+      <section className="relative z-20 py-24 md:py-64 px-6 md:px-12 bg-transparent">
         <div className="max-w-[1400px] mx-auto">
           <div className="mb-12 text-center">
             <h2 className="text-xs font-bold tracking-[0.2em] text-[#8A2BE2] uppercase mb-4">What clients say</h2>
@@ -50,7 +50,7 @@ const MainContent = () => {
       <AboutSection />
 
       {/* Blog Section */}
-      <section className="relative z-20 py-48 md:py-64 px-6 md:px-12 bg-transparent border-t border-white/5">
+      <section className="relative z-20 py-24 md:py-64 px-6 md:px-12 bg-transparent border-t border-white/5">
         <div className="max-w-[1400px] mx-auto">
           <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div>
