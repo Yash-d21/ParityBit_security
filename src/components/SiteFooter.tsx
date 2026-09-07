@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { brandLogo } from '../content/brand';
 import { footerContent } from '../content/footer';
+import { subscribeNewsletter } from '../lib/newsletter';
 import './SiteFooter.css';
 
 export function SiteFooter() {
   const phoneHref = `tel:${footerContent.phone.replace(/\s/g, '')}`;
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ tone: 'success' | 'error'; message: string } | null>(
+    null,
+  );
+
+  async function handleNewsletterSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setFeedback(null);
+
+    const result = await subscribeNewsletter(email);
+
+    if (result.ok) {
+      setEmail('');
+      setFeedback({ tone: 'success', message: result.message });
+    } else {
+      setFeedback({ tone: 'error', message: result.message });
+    }
+
+    setIsSubmitting(false);
+  }
 
   return (
     <footer className="site-footer" data-framer-name="Footer">
@@ -14,7 +39,7 @@ export function SiteFooter() {
           <p className="site-footer__newsletter-eyebrow">{footerContent.newsletter.eyebrow}</p>
           <h3 className="site-footer__newsletter-title">{footerContent.newsletter.title}</h3>
           <p className="site-footer__newsletter-desc">{footerContent.newsletter.description}</p>
-          <form className="site-footer__newsletter-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="site-footer__newsletter-form" onSubmit={handleNewsletterSubmit}>
             <label className="site-footer__visually-hidden" htmlFor="footer-newsletter-email">
               Work email
             </label>
@@ -26,11 +51,28 @@ export function SiteFooter() {
               autoComplete="email"
               placeholder={footerContent.newsletter.placeholder}
               className="site-footer__newsletter-input"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              disabled={isSubmitting}
             />
-            <button type="submit" className="site-footer__newsletter-button">
+            <button
+              type="submit"
+              className="site-footer__newsletter-button"
+              disabled={isSubmitting}
+            >
               {footerContent.newsletter.buttonLabel}
             </button>
           </form>
+          {feedback ? (
+            <p
+              className="site-footer__newsletter-desc"
+              role="status"
+              aria-live="polite"
+              data-newsletter-feedback={feedback.tone}
+            >
+              {feedback.message}
+            </p>
+          ) : null}
         </div>
 
         <div className="site-footer__main">
