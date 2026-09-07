@@ -1,5 +1,5 @@
 export const NEWSLETTER_WEBHOOK_URL =
-  'https://laksdalsmdlasdmasd.app.n8n.cloud/webhook/newsletter-subscribe';
+  'https://srv1906149.hstgr.cloud/webhook/newsletter-subscribe';
 
 export const NEWSLETTER_SUCCESS_MESSAGE =
   "You're subscribed. We'll send the next digest to your inbox.";
